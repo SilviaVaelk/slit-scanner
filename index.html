@@ -42,11 +42,12 @@
 
     let cursorInside = false;
     let currentRow = 0;
+    let cursorY = 0;
 
     const FPS = 2; // 1 row every 0.5 seconds
 
     const assets = [
-      'assets/sample1.png',
+      'assets/sample1.png'
     ];
 
     function resizeCanvases(width, height) {
@@ -64,7 +65,8 @@
       }
 
       if (cursorInside) {
-        const imageData = sourceCtx.getImageData(0, sourceCanvas.height - currentRow - 1, sourceCanvas.width, 1);
+        const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
+        const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
         scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
 
         currentRow++;
@@ -103,6 +105,10 @@
 
     leftContainer.addEventListener('mouseenter', () => cursorInside = true);
     leftContainer.addEventListener('mouseleave', () => cursorInside = false);
+    leftContainer.addEventListener('mousemove', (e) => {
+      const rect = leftContainer.getBoundingClientRect();
+      cursorY = e.clientY - rect.top;
+    });
   </script>
 </body>
 </html>
