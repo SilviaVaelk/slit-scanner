@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slit-Scan Interactive</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #left, #right {
+      width: 50%;
+      position: relative;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="left">
+    <canvas id="sourceCanvas"></canvas>
+  </div>
+  <div id="right">
+    <canvas id="scanCanvas"></canvas>
+  </div>
+
+  <script>
+    const sourceCanvas = document.getElementById('sourceCanvas');
+    const scanCanvas = document.getElementById('scanCanvas');
+    const leftContainer = document.getElementById('left');
+
+    const sourceCtx = sourceCanvas.getContext('2d');
+    const scanCtx = scanCanvas.getContext('2d');
+
+    let img = new Image();
+    let video = null;
+    let mediaType = null;
+
+    let cursorInside = false;
+    let currentRow = 0;
+
+    const FPS = 2; // 1 row every 0.5 seconds
+
+    const assets = [
+      'assets/sample1.png',
+      'assets/sample2.png',
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
+    ];
+
+    function resizeCanvases(width, height) {
+      sourceCanvas.width = width;
+      sourceCanvas.height = height;
+      scanCanvas.width = width;
+      scanCanvas.height = height;
+    }
+
+    function drawLoop() {
+      if (mediaType === 'image') {
+        sourceCtx.drawImage(img, 0, 0);
+      } else if (mediaType === 'video' && video) {
+        sourceCtx.drawImage(video, 0, 0, sourceCanvas.width, sourceCanvas.height);
+      }
+
+      if (cursorInside) {
+        const imageData = sourceCtx.getImageData(0, sourceCanvas.height - currentRow - 1, sourceCanvas.width, 1);
+        scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
+
+        currentRow++;
+        if (currentRow >= scanCanvas.height) currentRow = 0;
+      }
+    }
+
+    function loadRandomAsset() {
+      const asset = assets[Math.floor(Math.random() * assets.length)];
+      const isImage = asset.match(/\.(jpeg|jpg|png|gif)$/i);
+      const isVideo = asset.match(/\.(mp4|webm|ogg)$/i);
+
+      if (isImage) {
+        img.onload = () => {
+          mediaType = 'image';
+          resizeCanvases(img.width, img.height);
+          sourceCtx.drawImage(img, 0, 0);
+        };
+        img.src = asset;
+      } else if (isVideo) {
+        video = document.createElement('video');
+        video.src = asset;
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.onloadedmetadata = () => {
+          mediaType = 'video';
+          resizeCanvases(video.videoWidth, video.videoHeight);
+          video.play();
+        };
+      }
+    }
+
+    setInterval(drawLoop, 1000 / FPS);
+    loadRandomAsset();
+
+    leftContainer.addEventListener('mouseenter', () => cursorInside = true);
+    leftContainer.addEventListener('mouseleave', () => cursorInside = false);
+  </script>
+</body>
+</html>
