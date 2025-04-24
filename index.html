@@ -20,14 +20,14 @@
       gap: 32px;
       flex-wrap: wrap;
     }
-    #left {
-      aspect-ratio: 1 / 1;
+    .container-square {
       flex: 1 1 30%;
       max-width: 500px;
+      aspect-ratio: 1 / 1;
       background: white;
       position: relative;
     }
-    #left.hidden canvas {
+    .hidden canvas {
       opacity: 0;
       pointer-events: auto;
     }
@@ -82,7 +82,7 @@
 <body>
   <div id="cursorLine"></div>
   <div id="cursorLineVertical"></div>
-  <div id="left" class="hidden">
+  <div id="left" class="container-square hidden">
     <canvas id="sourceCanvas"></canvas>
     <div id="instructions">Press R to reveal, press N to load new</div>
   </div>
@@ -132,6 +132,8 @@
       scanCanvas.height = height;
       scanCanvasVertical.width = width;
       scanCanvasVertical.height = height;
+      currentRow = 0;
+      currentCol = 0;
     }
 
     function drawLoop() {
@@ -176,7 +178,7 @@
       if (cursorInside) {
         const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
-        scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
+        scanCtx.putImageData(imageData, 0, currentRow);
         currentRow++;
         if (currentRow >= scanCanvas.height) currentRow = 0;
 
