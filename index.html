@@ -28,15 +28,20 @@
       overflow: hidden;
     }
     #left {
-      flex: 1 1 500px;
+      flex: 1 1 auto;
+      aspect-ratio: 1 / 1;
+      height: 100%;
       max-width: 500px;
       border-radius: 8px;
       overflow: hidden;
+      position: relative;
+      background: white;
     }
     #middleRightWrapper {
       display: flex;
       flex-direction: row;
-      flex: 1 1 1000px;
+      flex: 1 1 auto;
+      height: 100%;
       max-width: 1000px;
       border-radius: 8px;
       overflow: hidden;
@@ -90,6 +95,7 @@
       color: #444;
       z-index: 5;
       pointer-events: none;
+      width: 100%;
     }
     #instructions h2 {
       margin: 0 0 8px;
