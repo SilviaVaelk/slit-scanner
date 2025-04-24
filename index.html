@@ -6,7 +6,7 @@
   <title>Slit-Scan Interactive</title>
   <style>
     body {
-      margin: 50;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -77,14 +77,12 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 10;
+    const FPS = 20;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.png',
-      'assets/sample1.mp4',
-      'assets/sample2.mp4'
+      'assets/sample3.mp4'
     ];
 
     function resizeCanvases(width, height) {
