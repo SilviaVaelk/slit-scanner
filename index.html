@@ -17,6 +17,7 @@
       box-sizing: border-box;
     }
     #left {
+      flex-shrink: 0;
       width: 500px;
       height: 500px;
       position: relative;
@@ -24,7 +25,9 @@
     }
     #middleRightWrapper {
       display: flex;
-      gap: 0;
+      flex-shrink: 0;
+      width: 1000px;
+      height: 500px;
     }
     #middle, #right {
       width: 500px;
@@ -99,7 +102,7 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 25;
+    const FPS = 20;
 
     const assets = [
       'assets/sample1.png',
