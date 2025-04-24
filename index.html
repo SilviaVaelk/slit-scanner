@@ -28,10 +28,10 @@
       overflow: hidden;
     }
     #left {
-      flex: 1 1 auto;
-      width: auto;
-      max-width: 500px;
+      height: 100%;
       aspect-ratio: 1 / 1;
+      flex: 1 1 auto;
+      max-width: 500px;
       border-radius: 8px;
       overflow: hidden;
       position: relative;
@@ -43,8 +43,8 @@
     #middleRightWrapper {
       display: flex;
       flex-direction: row;
-      flex: 1 1 auto;
       height: 100%;
+      flex: 1 1 auto;
       max-width: 1000px;
       border-radius: 8px;
       overflow: hidden;
@@ -116,7 +116,7 @@
   <div id="left" class="container-square hidden">
     <canvas id="sourceCanvas"></canvas>
     <div id="instructions">
-      <h2>Start scanning</h2>
+      <h2>Use cursor to scan</h2>
       <p>Press R to reveal, N to load new</p>
     </div>
   </div>
@@ -151,7 +151,7 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 10;
+    const FPS = 20;
 
     const assets = [
       'assets/sample1.png',
