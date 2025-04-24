@@ -17,8 +17,8 @@
       box-sizing: border-box;
     }
     #left, #middle, #right {
-      width: 333px;
-      height: 600px;
+      width: 500px;
+      height: 500px;
       position: relative;
       background: white;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -53,13 +53,13 @@
   <div id="left">
     <div id="cursorLine"></div>
     <div id="cursorLineVertical"></div>
-    <canvas id="sourceCanvas" width="333" height="600"></canvas>
+    <canvas id="sourceCanvas" width="500" height="500"></canvas>
   </div>
   <div id="middle">
-    <canvas id="scanCanvas" width="333" height="600"></canvas>
+    <canvas id="scanCanvas" width="500" height="500"></canvas>
   </div>
   <div id="right">
-    <canvas id="scanCanvasVertical" width="333" height="600"></canvas>
+    <canvas id="scanCanvasVertical" width="500" height="500"></canvas>
   </div>
 
   <script>
@@ -89,7 +89,9 @@
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.mp4'
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
@@ -163,7 +165,7 @@
       if (isImage) {
         img.onload = () => {
           mediaType = 'image';
-          resizeCanvases(333, 600);
+          resizeCanvases(500, 500);
         };
         img.src = asset;
       } else if (isVideo) {
@@ -174,7 +176,7 @@
         video.loop = true;
         video.onloadedmetadata = () => {
           mediaType = 'video';
-          resizeCanvases(333, 600);
+          resizeCanvases(500, 500);
           video.play();
         };
       }
