@@ -11,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0;
+      gap: 32px;
       height: 100vh;
       background: #EBEBEB;
       box-sizing: border-box;
@@ -21,9 +21,6 @@
       height: 500px;
       position: relative;
       background: white;
-    }
-    #middle, #right {
-      margin-left: 0;
     }
     canvas {
       display: block;
@@ -49,8 +46,9 @@
       background: #FFCC00;
       pointer-events: none;
     }
-    .hidden {
-      visibility: hidden;
+    .hidden canvas {
+      opacity: 0;
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -89,12 +87,14 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 25;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.mp4'
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
