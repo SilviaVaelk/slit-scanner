@@ -14,11 +14,12 @@
     }
     body {
       display: flex;
+      flex-direction: row;
       justify-content: center;
       align-items: center;
       padding: 64px;
       gap: 32px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     .container-square, #middle, #right {
       aspect-ratio: 1 / 1;
@@ -190,7 +191,7 @@
       if (cursorInside) {
         const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
-        scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
+        scanCtx.putImageData(imageData, 0, currentRow);
         currentRow++;
         if (currentRow >= scanCanvas.height) currentRow = 0;
 
