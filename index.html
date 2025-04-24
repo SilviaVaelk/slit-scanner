@@ -21,7 +21,8 @@
       gap: 32px;
       flex-wrap: nowrap;
     }
-    .container-square, #middle, #right {
+    $1
+      border-radius: 8px;
       aspect-ratio: 1 / 1;
       background: white;
       position: relative;
@@ -79,7 +80,7 @@
       font-family: sans-serif;
       color: #444;
     }
-    #instructions h3 {
+    #instructions h2 {
       margin: 0 0 8px;
       font-size: 12px;
     }
@@ -95,7 +96,7 @@
   <div id="left" class="container-square hidden">
     <canvas id="sourceCanvas"></canvas>
     <div id="instructions">
-      <h3>Scan here with your cursor</h3>
+      <h2>Start scanning</h2>
       <p>Press R to reveal, N to load new</p>
     </div>
   </div>
