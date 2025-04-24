@@ -11,9 +11,9 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #fff;
+      background: #000;
     }
-    #left, #right {
+    #left, #middle, #right {
       width: 500px;
       height: 900px;
       position: relative;
@@ -21,15 +21,23 @@
     canvas {
       display: block;
     }
-    #sourceCanvas, #scanCanvas {
+    #sourceCanvas, #scanCanvas, #scanCanvasVertical {
       image-rendering: pixelated;
     }
     #cursorLine {
       position: absolute;
       left: 0;
       width: 100%;
-      height: 2px;
-      background: black;
+      height: 1px;
+      background: red;
+      pointer-events: none;
+    }
+    #cursorLineVertical {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 1px;
+      background: blue;
       pointer-events: none;
     }
   </style>
@@ -39,33 +47,46 @@
     <div id="cursorLine"></div>
     <canvas id="sourceCanvas" width="500" height="900"></canvas>
   </div>
-  <div id="right">
+  <div id="middle">
     <canvas id="scanCanvas" width="500" height="900"></canvas>
+  </div>
+  <div id="right">
+    <div id="cursorLineVertical"></div>
+    <canvas id="scanCanvasVertical" width="500" height="900"></canvas>
   </div>
 
   <script>
     const sourceCanvas = document.getElementById('sourceCanvas');
     const scanCanvas = document.getElementById('scanCanvas');
+    const scanCanvasVertical = document.getElementById('scanCanvasVertical');
     const leftContainer = document.getElementById('left');
+    const rightContainer = document.getElementById('right');
     const cursorLine = document.getElementById('cursorLine');
+    const cursorLineVertical = document.getElementById('cursorLineVertical');
 
     const sourceCtx = sourceCanvas.getContext('2d');
     const scanCtx = scanCanvas.getContext('2d');
+    const scanCtxVertical = scanCanvasVertical.getContext('2d');
 
     let img = new Image();
     let video = null;
     let mediaType = null;
 
     let cursorInside = false;
+    let cursorInsideRight = false;
     let currentRow = 0;
+    let currentCol = 0;
     let cursorY = 0;
+    let cursorX = 0;
 
-    const FPS = 20;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.mp4'
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
@@ -73,6 +94,8 @@
       sourceCanvas.height = height;
       scanCanvas.width = width;
       scanCanvas.height = height;
+      scanCanvasVertical.width = width;
+      scanCanvasVertical.height = height;
     }
 
     function drawLoop() {
@@ -118,16 +141,23 @@
         const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
         scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
-
         currentRow++;
         if (currentRow >= scanCanvas.height) currentRow = 0;
+      }
+
+      if (cursorInsideRight) {
+        const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
+        const imageData = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
+        scanCtxVertical.putImageData(imageData, currentCol, 0);
+        currentCol++;
+        if (currentCol >= scanCanvasVertical.width) currentCol = 0;
       }
     }
 
     function loadRandomAsset() {
       const asset = assets[Math.floor(Math.random() * assets.length)];
       const isImage = asset.match(/\.(jpeg|jpg|png|gif)$/i);
-      const isVideo = asset.match(/\.(mp4|webm|ogg)$/i);
+      const isVideo = asset.match(/\.(mp4|webm|ogg|mov)$/i);
 
       if (isImage) {
         img.onload = () => {
@@ -162,6 +192,18 @@
       cursorY = e.clientY - rect.top;
       cursorLine.style.top = `${cursorY}px`;
       cursorLine.style.display = 'block';
+    });
+
+    rightContainer.addEventListener('mouseenter', () => cursorInsideRight = true);
+    rightContainer.addEventListener('mouseleave', () => {
+      cursorInsideRight = false;
+      cursorLineVertical.style.display = 'none';
+    });
+    rightContainer.addEventListener('mousemove', (e) => {
+      const rect = rightContainer.getBoundingClientRect();
+      cursorX = e.clientX - rect.left;
+      cursorLineVertical.style.left = `${cursorX}px`;
+      cursorLineVertical.style.display = 'block';
     });
   </script>
 </body>
