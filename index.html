@@ -11,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 40px;
+      gap: 0;
       height: 100vh;
       background: #EBEBEB;
       box-sizing: border-box;
@@ -21,7 +21,9 @@
       height: 500px;
       position: relative;
       background: white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    #middle, #right {
+      margin-left: 0;
     }
     canvas {
       display: block;
@@ -46,6 +48,9 @@
       width: 2px;
       background: #FFCC00;
       pointer-events: none;
+    }
+    .hidden {
+      visibility: hidden;
     }
   </style>
 </head>
@@ -84,14 +89,12 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 10;
+    const FPS = 25;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.png',
-      'assets/sample1.mp4',
-      'assets/sample2.mp4'
+      'assets/sample3.mp4'
     ];
 
     function resizeCanvases(width, height) {
@@ -181,6 +184,12 @@
         };
       }
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') {
+        leftContainer.classList.toggle('hidden');
+      }
+    });
 
     setInterval(drawLoop, 1000 / FPS);
     loadRandomAsset();
