@@ -71,11 +71,20 @@
     }
     #instructions {
       position: absolute;
-      bottom: 8px;
-      left: 8px;
-      font-size: 10px;
-      color: #444;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
       font-family: sans-serif;
+      color: #444;
+    }
+    #instructions h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    #instructions p {
+      margin: 0;
+      font-size: 10px;
     }
   </style>
 </head>
@@ -84,7 +93,10 @@
   <div id="cursorLineVertical"></div>
   <div id="left" class="container-square hidden">
     <canvas id="sourceCanvas"></canvas>
-    <div id="instructions">Press R to reveal, press N to load new</div>
+    <div id="instructions">
+      <h2>Start scanning</h2>
+      <p>Press R to reveal, N to load new</p>
+    </div>
   </div>
   <div id="middleRightWrapper">
     <div id="middle">
@@ -178,7 +190,7 @@
       if (cursorInside) {
         const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
-        scanCtx.putImageData(imageData, 0, currentRow);
+        scanCtx.putImageData(imageData, 0, scanCanvas.height - currentRow - 1);
         currentRow++;
         if (currentRow >= scanCanvas.height) currentRow = 0;
 
