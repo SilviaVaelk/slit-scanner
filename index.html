@@ -20,18 +20,28 @@
       gap: 32px;
       flex-wrap: wrap;
     }
-    #left, #middle, #right {
+    #left {
       aspect-ratio: 1 / 1;
       flex: 1 1 30%;
       max-width: 500px;
       background: white;
       position: relative;
     }
+    #left.hidden canvas {
+      opacity: 0;
+      pointer-events: auto;
+    }
     #middleRightWrapper {
       display: flex;
       gap: 0;
       flex: 1 1 60%;
-      max-width: 1000px;
+      max-width: calc(500px * 2);
+    }
+    #middle, #right {
+      flex: 1 1 50%;
+      aspect-ratio: 1 / 1;
+      background: white;
+      position: relative;
     }
     canvas {
       display: block;
@@ -59,17 +69,22 @@
       pointer-events: none;
       z-index: 10;
     }
-    .hidden canvas {
-      opacity: 0;
-      pointer-events: auto;
+    #instructions {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      font-size: 10px;
+      color: #444;
+      font-family: sans-serif;
     }
   </style>
 </head>
 <body>
   <div id="cursorLine"></div>
   <div id="cursorLineVertical"></div>
-  <div id="left">
+  <div id="left" class="hidden">
     <canvas id="sourceCanvas"></canvas>
+    <div id="instructions">Press R to reveal, press N to load new</div>
   </div>
   <div id="middleRightWrapper">
     <div id="middle">
@@ -102,12 +117,14 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 20;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.mp4'
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
@@ -201,6 +218,9 @@
     document.addEventListener('keydown', (e) => {
       if (e.key.toLowerCase() === 'r') {
         leftContainer.classList.toggle('hidden');
+      }
+      if (e.key.toLowerCase() === 'n') {
+        loadRandomAsset();
       }
     });
 
