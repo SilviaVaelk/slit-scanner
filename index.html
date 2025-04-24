@@ -7,19 +7,26 @@
   <style>
     body {
       margin: 0;
+      padding: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 40px;
       height: 100vh;
-      background: #fafafa;
+      background: #EBEBEB;
+      box-sizing: border-box;
     }
     #left, #middle, #right {
-      width: 500px;
-      height: 500px;
+      width: 333px;
+      height: 600px;
       position: relative;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     canvas {
       display: block;
+      width: 100%;
+      height: 100%;
     }
     #sourceCanvas, #scanCanvas, #scanCanvasVertical {
       image-rendering: pixelated;
@@ -46,13 +53,13 @@
   <div id="left">
     <div id="cursorLine"></div>
     <div id="cursorLineVertical"></div>
-    <canvas id="sourceCanvas" width="500" height="900"></canvas>
+    <canvas id="sourceCanvas" width="333" height="600"></canvas>
   </div>
   <div id="middle">
-    <canvas id="scanCanvas" width="500" height="900"></canvas>
+    <canvas id="scanCanvas" width="333" height="600"></canvas>
   </div>
   <div id="right">
-    <canvas id="scanCanvasVertical" width="500" height="900"></canvas>
+    <canvas id="scanCanvasVertical" width="333" height="600"></canvas>
   </div>
 
   <script>
@@ -77,7 +84,7 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 20;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
@@ -156,7 +163,7 @@
       if (isImage) {
         img.onload = () => {
           mediaType = 'image';
-          resizeCanvases(500, 900);
+          resizeCanvases(333, 600);
         };
         img.src = asset;
       } else if (isVideo) {
@@ -167,7 +174,7 @@
         video.loop = true;
         video.onloadedmetadata = () => {
           mediaType = 'video';
-          resizeCanvases(500, 900);
+          resizeCanvases(333, 600);
           video.play();
         };
       }
