@@ -42,11 +42,13 @@
       overflow: hidden;
       background: white;
       gap: 0;
+      position: relative;
     }
     #middle, #right {
       flex: 1 1 500px;
       max-width: 500px;
-      border-radius: 8px;
+      border-radius: 0;
+      overflow: hidden;
     }
     .hidden canvas {
       opacity: 0;
@@ -85,11 +87,13 @@
       transform: translate(-50%, -50%);
       text-align: center;
       font-family: sans-serif;
-      color: #FFCC00;
+      color: #444;
+      z-index: 5;
+      pointer-events: none;
     }
     #instructions h2 {
       margin: 0 0 8px;
-      font-size: 12px;
+      font-size: 16px;
     }
     #instructions p {
       margin: 0;
@@ -138,12 +142,14 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const FPS = 20;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.mp4'
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
