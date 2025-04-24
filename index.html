@@ -16,7 +16,17 @@
       background: #EBEBEB;
       box-sizing: border-box;
     }
-    #left, #middle, #right {
+    #left {
+      width: 500px;
+      height: 500px;
+      position: relative;
+      background: white;
+    }
+    #middleRightWrapper {
+      display: flex;
+      gap: 0;
+    }
+    #middle, #right {
       width: 500px;
       height: 500px;
       position: relative;
@@ -58,11 +68,13 @@
     <div id="cursorLineVertical"></div>
     <canvas id="sourceCanvas" width="500" height="500"></canvas>
   </div>
-  <div id="middle">
-    <canvas id="scanCanvas" width="500" height="500"></canvas>
-  </div>
-  <div id="right">
-    <canvas id="scanCanvasVertical" width="500" height="500"></canvas>
+  <div id="middleRightWrapper">
+    <div id="middle">
+      <canvas id="scanCanvas" width="500" height="500"></canvas>
+    </div>
+    <div id="right">
+      <canvas id="scanCanvasVertical" width="500" height="500"></canvas>
+    </div>
   </div>
 
   <script>
@@ -92,9 +104,7 @@
     const assets = [
       'assets/sample1.png',
       'assets/sample2.png',
-      'assets/sample3.png',
-      'assets/sample1.mp4',
-      'assets/sample2.mp4'
+      'assets/sample3.mp4'
     ];
 
     function resizeCanvases(width, height) {
