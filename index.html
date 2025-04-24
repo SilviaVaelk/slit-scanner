@@ -5,35 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slit-Scan Interactive</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 32px;
-      height: 100vh;
+      padding: 0;
+      height: 100%;
       background: #EBEBEB;
       box-sizing: border-box;
     }
-    #left {
-      flex-shrink: 0;
-      width: 500px;
-      height: 500px;
-      position: relative;
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 64px;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    #left, #middle, #right {
+      aspect-ratio: 1 / 1;
+      flex: 1 1 30%;
+      max-width: 500px;
       background: white;
+      position: relative;
     }
     #middleRightWrapper {
       display: flex;
-      flex-shrink: 0;
-      width: 1000px;
-      height: 500px;
-    }
-    #middle, #right {
-      width: 500px;
-      height: 500px;
-      position: relative;
-      background: white;
+      gap: 0;
+      flex: 1 1 60%;
+      max-width: 1000px;
     }
     canvas {
       display: block;
@@ -44,20 +42,22 @@
       image-rendering: pixelated;
     }
     #cursorLine {
-      position: absolute;
+      position: fixed;
       left: 0;
       width: 100%;
       height: 2px;
       background: #FFCC00;
       pointer-events: none;
+      z-index: 10;
     }
     #cursorLineVertical {
-      position: absolute;
+      position: fixed;
       top: 0;
       height: 100%;
       width: 2px;
       background: #FFCC00;
       pointer-events: none;
+      z-index: 10;
     }
     .hidden canvas {
       opacity: 0;
@@ -66,17 +66,17 @@
   </style>
 </head>
 <body>
+  <div id="cursorLine"></div>
+  <div id="cursorLineVertical"></div>
   <div id="left">
-    <div id="cursorLine"></div>
-    <div id="cursorLineVertical"></div>
-    <canvas id="sourceCanvas" width="500" height="500"></canvas>
+    <canvas id="sourceCanvas"></canvas>
   </div>
   <div id="middleRightWrapper">
     <div id="middle">
-      <canvas id="scanCanvas" width="500" height="500"></canvas>
+      <canvas id="scanCanvas"></canvas>
     </div>
     <div id="right">
-      <canvas id="scanCanvasVertical" width="500" height="500"></canvas>
+      <canvas id="scanCanvasVertical"></canvas>
     </div>
   </div>
 
@@ -181,7 +181,7 @@
       if (isImage) {
         img.onload = () => {
           mediaType = 'image';
-          resizeCanvases(500, 500);
+          resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
         };
         img.src = asset;
       } else if (isVideo) {
@@ -192,7 +192,7 @@
         video.loop = true;
         video.onloadedmetadata = () => {
           mediaType = 'video';
-          resizeCanvases(500, 500);
+          resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
           video.play();
         };
       }
@@ -217,9 +217,9 @@
       const rect = leftContainer.getBoundingClientRect();
       cursorY = e.clientY - rect.top;
       cursorX = e.clientX - rect.left;
-      cursorLine.style.top = `${cursorY}px`;
+      cursorLine.style.top = `${e.clientY}px`;
       cursorLine.style.display = 'block';
-      cursorLineVertical.style.left = `${cursorX}px`;
+      cursorLineVertical.style.left = `${e.clientX}px`;
       cursorLineVertical.style.display = 'block';
     });
   </script>
