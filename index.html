@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix12</title>
+  <title>Slit-Scan Interactive fix13</title>
   <style>
     html, body {
       margin: 0;
@@ -227,7 +227,6 @@
     const previous = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
     scanCtx.putImageData(previous, 0, -1);
     scanCtx.putImageData(imageData, 0, scanCanvas.height - 1);
-    });
 
     colQueue.push(imageDataCol);
     if (colQueue.length > colDelay) {
