@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive</title>
+  <title>Slit-Scan Interactive test</title>
   <style>
     html, body {
       margin: 0;
@@ -239,9 +239,9 @@
           const delayedCol = colQueue.shift();
           scanCtxVertical.putImageData(delayedCol, currentCol, 0);
           currentCol = (currentCol + 1) % scanCanvasVertical.width;
-            }
-  }
+        }
       }
+    }
     }
 
     function loadRandomAsset() {
