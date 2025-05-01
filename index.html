@@ -154,18 +154,19 @@
     let cursorY = 0;
     let cursorX = 0;
 
+    const rowQueue = [];
+    const colQueue = [];
+    const rowDelay = 10;
+    const colDelay = 10;
+
     const FPS = 15;
 
     const assets = [
       'assets/sample1.png',
-      'assets/sample2.jpg',
-      'assets/sample3.jpg',
-      'assets/sample4.mp4',
-      'assets/sample5.mp4',
-      'assets/sample6.jpg',
-      'assets/sample7.png',
-      'assets/sample8.png',
-      'assets/sample9.png'
+      'assets/sample2.png',
+      'assets/sample3.png',
+      'assets/sample1.mp4',
+      'assets/sample2.mp4'
     ];
 
     function resizeCanvases(width, height) {
@@ -219,6 +220,28 @@
       }
 
       if (cursorInside) {
+        const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
+        const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
+
+        const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
+        const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
+
+        // Create a queue to delay updates for a staggered effect
+        rowQueue.push(imageData);
+        colQueue.push(imageDataCol);
+
+        if (rowQueue.length > rowDelay) {
+          const delayedRow = rowQueue.shift();
+          scanCtx.putImageData(delayedRow, 0, currentRow);
+          currentRow = (currentRow + 1) % scanCanvas.height;
+        }
+
+        if (colQueue.length > colDelay) {
+          const delayedCol = colQueue.shift();
+          scanCtxVertical.putImageData(delayedCol, currentCol, 0);
+          currentCol = (currentCol + 1) % scanCanvasVertical.width;
+        }
+      }
         const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
         scanCtx.putImageData(imageData, 0, currentRow);
