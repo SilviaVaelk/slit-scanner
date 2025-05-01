@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix16 </title>
+  <title>Slit-Scan Interactive fix17 </title>
   <style>
     html, body {
       margin: 0;
@@ -218,18 +218,28 @@
     sourceCtx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
   }
 
-    if (cursorInside) {$1scanCtx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-    scanCtx.fillRect(0, 0, scanCanvas.width, scanCanvas.height);
-    scanCtx.putImageData(imageData, 0, 0);
+if (cursorInside) {
+  scanCtx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  scanCtx.fillRect(0, 0, scanCanvas.width, scanCanvas.height);
 
-    colQueue.push(imageDataCol);
-    if (colQueue.length > colDelay) {
-      const delayedCol = colQueue.shift();
-      scanCtxVertical.putImageData(delayedCol, currentCol, 0);
-      currentCol = (currentCol + 1) % scanCanvasVertical.width;
-    }
-    }
+  const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
+  const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
+
+  const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
+  const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
+
+  const scrollImage = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
+  scanCtx.putImageData(scrollImage, 0, 1);
+  scanCtx.putImageData(imageData, 0, 0);
+
+  colQueue.push(imageDataCol);
+  if (colQueue.length > colDelay) {
+    const delayedCol = colQueue.shift();
+    scanCtxVertical.putImageData(delayedCol, currentCol, 0);
+    currentCol = (currentCol + 1) % scanCanvasVertical.width;
   }
+}
+
 
 function loadRandomAsset() {
       const asset = assets[Math.floor(Math.random() * assets.length)];
