@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix 1</title>
+  <title>Slit-Scan Interactive fix 2</title>
   <style>
     html, body {
       margin: 0;
@@ -181,67 +181,67 @@
     }
 
     function drawLoop() {
-      if (mediaType === 'image') {
-        sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
-        const imgAspect = img.width / img.height;
-        const canvasAspect = sourceCanvas.width / sourceCanvas.height;
-        let drawWidth = sourceCanvas.width;
-        let drawHeight = sourceCanvas.height;
-        let offsetX = 0;
-        let offsetY = 0;
+  if (mediaType === 'image') {
+    sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+    const imgAspect = img.width / img.height;
+    const canvasAspect = sourceCanvas.width / sourceCanvas.height;
+    let drawWidth = sourceCanvas.width;
+    let drawHeight = sourceCanvas.height;
+    let offsetX = 0;
+    let offsetY = 0;
 
-        if (imgAspect > canvasAspect) {
-          drawWidth = sourceCanvas.height * imgAspect;
-          offsetX = (sourceCanvas.width - drawWidth) / 2;
-        } else {
-          drawHeight = sourceCanvas.width / imgAspect;
-          offsetY = (sourceCanvas.height - drawHeight) / 2;
-        }
-
-        sourceCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-      } else if (mediaType === 'video' && video) {
-        sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
-        const vidAspect = video.videoWidth / video.videoHeight;
-        const canvasAspect = sourceCanvas.width / sourceCanvas.height;
-        let drawWidth = sourceCanvas.width;
-        let drawHeight = sourceCanvas.height;
-        let offsetX = 0;
-        let offsetY = 0;
-
-        if (vidAspect > canvasAspect) {
-          drawWidth = sourceCanvas.height * vidAspect;
-          offsetX = (sourceCanvas.width - drawWidth) / 2;
-        } else {
-          drawHeight = sourceCanvas.width / vidAspect;
-          offsetY = (sourceCanvas.height - drawHeight) / 2;
-        }
-
-        sourceCtx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
-      }
-
-      if (cursorInside) {
-        const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
-        const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
-
-        const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
-        const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
-
-        rowQueue.push(imageData);
-        colQueue.push(imageDataCol);
-
-        if (rowQueue.length > rowDelay) {
-          const delayedRow = rowQueue.shift();
-          scanCtx.putImageData(delayedRow, 0, currentRow);
-          currentRow = (currentRow + 1) % scanCanvas.height;
-        }
-
-        if (colQueue.length > colDelay) {
-          const delayedCol = colQueue.shift();
-          scanCtxVertical.putImageData(delayedCol, currentCol, 0);
-          currentCol = (currentCol + 1) % scanCanvasVertical.width;
-        }
-      }
+    if (imgAspect > canvasAspect) {
+      drawWidth = sourceCanvas.height * imgAspect;
+      offsetX = (sourceCanvas.width - drawWidth) / 2;
+    } else {
+      drawHeight = sourceCanvas.width / imgAspect;
+      offsetY = (sourceCanvas.height - drawHeight) / 2;
     }
+
+    sourceCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  } else if (mediaType === 'video' && video) {
+    sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+    const vidAspect = video.videoWidth / video.videoHeight;
+    const canvasAspect = sourceCanvas.width / sourceCanvas.height;
+    let drawWidth = sourceCanvas.width;
+    let drawHeight = sourceCanvas.height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (vidAspect > canvasAspect) {
+      drawWidth = sourceCanvas.height * vidAspect;
+      offsetX = (sourceCanvas.width - drawWidth) / 2;
+    } else {
+      drawHeight = sourceCanvas.width / vidAspect;
+      offsetY = (sourceCanvas.height - drawHeight) / 2;
+    }
+
+    sourceCtx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
+  }
+
+  if (cursorInside) {
+    const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
+    const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
+
+    const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
+    const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
+
+    rowQueue.push(imageData);
+    colQueue.push(imageDataCol);
+
+    if (rowQueue.length > rowDelay) {
+      const delayedRow = rowQueue.shift();
+      scanCtx.putImageData(delayedRow, 0, currentRow);
+      currentRow = (currentRow + 1) % scanCanvas.height;
+    }
+
+    if (colQueue.length > colDelay) {
+      const delayedCol = colQueue.shift();
+      scanCtxVertical.putImageData(delayedCol, currentCol, 0);
+      currentCol = (currentCol + 1) % scanCanvasVertical.width;
+    }
+  }
+}
     }
     }
 
