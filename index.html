@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix23</title>
+  <title>Slit-Scan Interactive fix15 </title>
   <style>
     html, body {
       margin: 0;
@@ -179,6 +179,7 @@
     }
 
     function drawLoop() {
+
   if (mediaType === 'image') {
     sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
     const imgAspect = img.width / img.height;
@@ -218,15 +219,14 @@
   }
 
   if (cursorInside) {
-    scanCtx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-    scanCtx.fillRect(0, 0, scanCanvas.width, scanCanvas.height);
     const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
     const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
 
-    const imageData = sourceCtx.getImageData(0, clampedY, scanCanvas.width, 1);
-    const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, scanCanvas.height);
+    const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
+    const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
 
     const scrollImage = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
+    scanCtx.clearRect(0, 0, scanCanvas.width, scanCanvas.height);
     scanCtx.putImageData(scrollImage, 0, 1);
     scanCtx.putImageData(imageData, 0, 0);
 
@@ -235,6 +235,7 @@
       const delayedCol = colQueue.shift();
       scanCtxVertical.putImageData(delayedCol, currentCol, 0);
       currentCol = (currentCol + 1) % scanCanvasVertical.width;
+    }
     }
   }
 }
@@ -327,4 +328,3 @@ function loadRandomAsset() {
 </script>
 </body>
 </html>
-
