@@ -159,7 +159,7 @@
     const rowDelay = 10;
     const colDelay = 10;
 
-    const FPS = 15;
+    const FPS = 10;
 
     const assets = [
       'assets/sample1.png',
@@ -226,7 +226,6 @@
         const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
         const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
 
-        // Create a queue to delay updates for a staggered effect
         rowQueue.push(imageData);
         colQueue.push(imageDataCol);
 
@@ -242,17 +241,7 @@
           currentCol = (currentCol + 1) % scanCanvasVertical.width;
         }
       }
-        const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
-        const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
-        scanCtx.putImageData(imageData, 0, currentRow);
-        currentRow++;
-        if (currentRow >= scanCanvas.height) currentRow = 0;
-
-        const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
-        const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
-        scanCtxVertical.putImageData(imageDataCol, currentCol, 0);
-        currentCol++;
-        if (currentCol >= scanCanvasVertical.width) currentCol = 0;
+      }
       }
     }
 
