@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix6</title>
+  <title>Slit-Scan Interactive fix 7</title>
   <style>
     html, body {
       margin: 0;
@@ -152,7 +152,7 @@
     let cursorY = 0;
     let cursorX = 0;
 
-    const rowQueue = [];
+    let rowStack = [];
     const colQueue = [];
     const rowDelay = 10;
     const colDelay = 10;
@@ -224,19 +224,20 @@
     const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
     const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
 
-    rowQueue.push(imageData);
+    rowStack.push(imageData);
+    if (rowStack.length > scanCanvas.height) rowStack.shift();
+
+    scanCtx.clearRect(0, 0, scanCanvas.width, scanCanvas.height);
+    rowStack.forEach((row, i) => {
+      scanCtx.putImageData(row, 0, i);
+    });
+
     colQueue.push(imageDataCol);
-
-    if (rowQueue.length > rowDelay) {
-      const delayedRow = rowQueue.shift();
-      scanCtx.putImageData(delayedRow, 0, currentRow);
-      currentRow = (currentRow + 1) % scanCanvas.height;
-    }
-
     if (colQueue.length > colDelay) {
       const delayedCol = colQueue.shift();
       scanCtxVertical.putImageData(delayedCol, currentCol, 0);
       currentCol = (currentCol + 1) % scanCanvasVertical.width;
+    }
     }
   }
 }
