@@ -95,7 +95,7 @@
       transform: translate(-50%, -50%);
       text-align: center;
       font-family: sans-serif;
-      color: #000;
+      color: #444;
       z-index: 5;
       pointer-events: none;
       width: 100%;
@@ -115,7 +115,7 @@
     <div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press R to reveal, N to load new, H to hide cursor</div>
     <input type="file" id="fileInput" accept="image/*,video/*" />
   </div>
-    <input type="file" id="fileInput" accept="image/*" />
+    
   </div>
   <div id="cursorLine"></div>
   <div id="cursorLineVertical"></div>
@@ -266,9 +266,9 @@
     loadRandomAsset();
   }
   if (e.key.toLowerCase() === 'h') {
-    const isHidden = cursorLine.style.display === 'none';
-    cursorLine.style.display = isHidden ? 'block' : 'none';
-    cursorLineVertical.style.display = isHidden ? 'block' : 'none';
+    const areVisible = cursorLine.style.visibility !== 'hidden';
+    cursorLine.style.visibility = areVisible ? 'hidden' : 'visible';
+    cursorLineVertical.style.visibility = areVisible ? 'hidden' : 'visible';
   }
 });
 
