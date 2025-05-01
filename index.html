@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix14</title>
+  <title>Slit-Scan Interactive fix15 </title>
   <style>
     html, body {
       margin: 0;
@@ -179,6 +179,7 @@
     }
 
     function drawLoop() {
+
   if (mediaType === 'image') {
     sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
     const imgAspect = img.width / img.height;
@@ -224,9 +225,10 @@
     const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
     const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
 
-    const previous = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
-    scanCtx.putImageData(previous, 0, -1);
-    scanCtx.putImageData(imageData, 0, scanCanvas.height - 1);
+    const scrollImage = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
+    scanCtx.clearRect(0, 0, scanCanvas.width, scanCanvas.height);
+    scanCtx.putImageData(scrollImage, 0, 1);
+    scanCtx.putImageData(imageData, 0, 0);
 
     colQueue.push(imageDataCol);
     if (colQueue.length > colDelay) {
@@ -234,8 +236,10 @@
       scanCtxVertical.putImageData(delayedCol, currentCol, 0);
       currentCol = (currentCol + 1) % scanCanvasVertical.width;
     }
+    }
   }
 }
+
 function loadRandomAsset() {
       const asset = assets[Math.floor(Math.random() * assets.length)];
       const isImage = asset.match(/\.(jpeg|jpg|png|gif)$/i);
