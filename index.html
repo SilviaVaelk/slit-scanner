@@ -95,14 +95,14 @@
       transform: translate(-50%, -50%);
       text-align: center;
       font-family: sans-serif;
-      color: #FFCC00;
+      color: #000;
       z-index: 5;
       pointer-events: none;
       width: 100%;
     }
     #instructions h2 {
       margin: 0 0 8px;
-      font-size: 12px;
+      font-size: 16px;
     }
     #instructions p {
       margin: 0;
@@ -111,8 +111,10 @@
   </style>
 </head>
 <body>
-  <div style="position: absolute; top: 16px; left: 64px; font-family: sans-serif; font-size: 12px; color: #444;">
-    <div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press R to reveal, N to load new</div>
+  <div style="position: absolute; bottom: 16px; left: 64px; font-family: sans-serif; font-size: 12px; color: #444;">
+    <div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press R to reveal, N to load new, H to hide cursor</div>
+    <input type="file" id="fileInput" accept="image/*,video/*" />
+  </div>
     <input type="file" id="fileInput" accept="image/*" />
   </div>
   <div id="cursorLine"></div>
@@ -257,13 +259,18 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 'r') {
-        leftContainer.classList.toggle('hidden');
-      }
-      if (e.key.toLowerCase() === 'n') {
-        loadRandomAsset();
-      }
-    });
+  if (e.key.toLowerCase() === 'r') {
+    leftContainer.classList.toggle('hidden');
+  }
+  if (e.key.toLowerCase() === 'n') {
+    loadRandomAsset();
+  }
+  if (e.key.toLowerCase() === 'h') {
+    const isHidden = cursorLine.style.display === 'none';
+    cursorLine.style.display = isHidden ? 'block' : 'none';
+    cursorLineVertical.style.display = isHidden ? 'block' : 'none';
+  }
+});
 
     setInterval(drawLoop, 1000 / FPS);
     loadRandomAsset();
@@ -285,7 +292,8 @@
     });
   document.getElementById('fileInput').addEventListener('change', (event) => {
   const file = event.target.files[0];
-  if (file && file.type.startsWith('image/')) {
+  if (!file) return;
+  if (file.type.startsWith('image/')) {
     const reader = new FileReader();
     reader.onload = (e) => {
       img.onload = () => {
@@ -295,6 +303,18 @@
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+  } else if (file.type.startsWith('video/')) {
+    const videoURL = URL.createObjectURL(file);
+    video = document.createElement('video');
+    video.src = videoURL;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.onloadedmetadata = () => {
+      mediaType = 'video';
+      resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
+      video.play();
+    };
   }
 });
 
