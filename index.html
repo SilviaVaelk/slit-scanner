@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive fix10</title>
+  <title>Slit-Scan Interactive fix11</title>
   <style>
     html, body {
       margin: 0;
@@ -224,13 +224,10 @@
     const imageData = sourceCtx.getImageData(0, clampedY, sourceCanvas.width, 1);
     const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, sourceCanvas.height);
 
-    rowStack.push(imageData);
-    if (rowStack.length > scanCanvas.height) rowStack.shift();
+    const shiftData = scanCtx.getImageData(0, 1, scanCanvas.width, scanCanvas.height - 1);
+scanCtx.putImageData(shiftData, 0, 0);
+scanCtx.putImageData(imageData, 0, scanCanvas.height - 1);
 
-    scanCtx.clearRect(0, 0, scanCanvas.width, scanCanvas.height);
-    rowStack.forEach((row, i) => {
-      scanCtx.putImageData(row, 0, i);
-    });
 
     colQueue.push(imageDataCol);
     if (colQueue.length > colDelay) {
