@@ -1,318 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slit-Scan Interactive - reveal</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #EBEBEB;
-      box-sizing: border-box;
-    }
-    body {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding: 64px;
-      gap: 32px;
-      flex-wrap: nowrap;
-    }
-    .container-square, #middle, #right {
-      flex: 1 1 500px;
-      max-width: 500px;
-      border-radius: 0;
-      overflow: hidden;
-    }
-    #left {
-      height: 100%;
-      aspect-ratio: 1 / 1;
-      flex: 1 1 auto;
-      max-width: 500px;
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    #middleRightWrapper {
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-      flex: 1 1 auto;
-      max-width: 1000px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: white;
-      gap: 0;
-      position: relative;
-    }
-    #middle, #right {
-      flex: 1 1 500px;
-      max-width: 500px;
-      border-radius: 0;
-      overflow: hidden;
-    }
-    }
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    #sourceCanvas, #scanCanvas, #scanCanvasVertical {
-      image-rendering: pixelated;
-    }
-    #cursorLine {
-      position: fixed;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: #FFCC00;
-      pointer-events: none;
-      z-index: 10;
-    }
-    #cursorLineVertical {
-      position: fixed;
-      top: 0;
-      height: 100%;
-      width: 2px;
-      background: #FFCC00;
-      pointer-events: none;
-      z-index: 10;
-    }
-    #instructions {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      font-family: sans-serif;
-      color: #444;
-      z-index: 5;
-      pointer-events: none;
-      width: 100%;
-    }
-    #instructions h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-    #instructions p {
-      margin: 0;
-      font-size: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slit-Scan Interactive fix1</title>
+<style>
+html, body {
+margin: 0;
+padding: 0;
+height: 100%;
+background: #EBEBEB;
+box-sizing: border-box;
+}
+body {
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 64px;
+gap: 32px;
+flex-wrap: nowrap;
+}
+.container-square, #middle, #right {
+flex: 1 1 500px;
+max-width: 500px;
+border-radius: 0;
+overflow: hidden;
+}
+#left {
+height: 100%;
+aspect-ratio: 1 / 1;
+flex: 1 1 auto;
+max-width: 500px;
+border-radius: 8px;
+overflow: hidden;
+position: relative;
+background: white;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+#middleRightWrapper {
+display: flex;
+flex-direction: row;
+height: 100%;
+flex: 1 1 auto;
+max-width: 1000px;
+border-radius: 8px;
+overflow: hidden;
+background: white;
+gap: 0;
+position: relative;
+}
+#middle, #right {
+flex: 1 1 500px;
+max-width: 500px;
+border-radius: 0;
+overflow: hidden;
+}
+.hidden canvas {
+opacity: 1;
+pointer-events: auto;
+}
+canvas {
+display: block;
+width: 100%;
+height: 100%;
+}
+#sourceCanvas, #scanCanvas, #scanCanvasVertical {
+image-rendering: pixelated;
+}
+#cursorLine {
+position: fixed;
+left: 0;
+width: 100%;
+height: 2px;
+background: #FFCC00;
+pointer-events: none;
+z-index: 10;
+}
+#cursorLineVertical {
+position: fixed;
+top: 0;
+height: 100%;
+width: 2px;
+background: #FFCC00;
+pointer-events: none;
+z-index: 10;
+}
+#instructions {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+font-family: sans-serif;
+color: #444;
+z-index: 5;
+pointer-events: none;
+width: 100%;
+}
+#instructions h2 {
+margin: 0 0 8px;
+font-size: 16px;
+}
+#instructions p {
+margin: 0;
+font-size: 10px;
+}
+</style>
 </head>
 <body>
-  <div style="position: absolute; bottom: 16px; left: 64px; font-family: sans-serif; font-size: 12px; color: #444;">
-    <div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press N to load new</div>
-    <input type="file" id="fileInput" accept="image/*,video/*" />
-  </div>
-  <div id="cursorLine"></div>
-  <div id="cursorLineVertical"></div>
-  <div id="left" class="container-square hidden">
-    <canvas id="sourceCanvas"></canvas>
-    
-  </div>
-  <div id="middleRightWrapper">
-    <div id="middle">
-      <canvas id="scanCanvas"></canvas>
-    </div>
-    <div id="right">
-      <canvas id="scanCanvasVertical"></canvas>
-    </div>
-  </div>
+<div style="position: absolute; bottom: 16px; left: 64px; font-family: sans-serif; font-size: 12px; color: #444;">
+<div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press R to reveal, N to load new, H to hide cursor</div>
+<input type="file" id="fileInput" accept="image/*,video/*" />
+</div>
+<div id="cursorLine"></div>
+<div id="cursorLineVertical"></div>
+<div id="left" class="container-square hidden">
+<canvas id="sourceCanvas"></canvas>
 
-  <script>
-    const sourceCanvas = document.getElementById('sourceCanvas');
-    const scanCanvas = document.getElementById('scanCanvas');
-    const scanCanvasVertical = document.getElementById('scanCanvasVertical');
-    const leftContainer = document.getElementById('left');
-    const cursorLine = document.getElementById('cursorLine');
-    const cursorLineVertical = document.getElementById('cursorLineVertical');
+</div>
+<div id="middleRightWrapper">
+<div id="middle">
+<canvas id="scanCanvas"></canvas>
+</div>
+<div id="right">
+<canvas id="scanCanvasVertical"></canvas>
+</div>
+</div>
 
-    const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
-    const scanCtx = scanCanvas.getContext('2d');
-    const scanCtxVertical = scanCanvasVertical.getContext('2d');
+<script>
+const sourceCanvas = document.getElementById('sourceCanvas');
+const scanCanvas = document.getElementById('scanCanvas');
+const scanCanvasVertical = document.getElementById('scanCanvasVertical');
+const leftContainer = document.getElementById('left');
+const cursorLine = document.getElementById('cursorLine');
+const cursorLineVertical = document.getElementById('cursorLineVertical');
 
-    let img = new Image();
-    let video = null;
-    let mediaType = null;
+const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
+const scanCtx = scanCanvas.getContext('2d');
+const scanCtxVertical = scanCanvasVertical.getContext('2d');
 
-    let cursorInside = false;
-    let currentRow = 0;
-    let currentCol = 0;
-    let cursorY = 0;
-    let cursorX = 0;
+let img = new Image();
+let video = null;
+let mediaType = null;
 
-    let rowStack = [];
-    const colQueue = [];
-    const rowDelay = 10;
-    const colDelay = 10;
+let cursorInside = false;
+let currentRow = 0;
+let currentCol = 0;
+let cursorY = 0;
+let cursorX = 0;
 
-    const FPS = 20;
+let rowStack = [];
+const colQueue = [];
+const rowDelay = 10;
+const colDelay = 10;
 
-    const assets = [
-      'assets/sample1.png',
-      'assets/sample2.png',
-      'assets/sample3.png',
-      'assets/sample1.mp4',
-      'assets/sample2.mp4'
-    ];
+const FPS = 20;
 
-    function resizeCanvases(width, height) {
-      sourceCanvas.width = width;
-      sourceCanvas.height = height;
-      scanCanvas.width = width;
-      scanCanvas.height = height;
-      scanCanvasVertical.width = width;
-      scanCanvasVertical.height = height;
-      currentRow = 0;
-      currentCol = 0;
-    }
+const assets = [
+'assets/sample1.png',
+'assets/sample2.png',
+'assets/sample3.png',
+'assets/sample1.mp4',
+'assets/sample2.mp4'
+];
 
-    function drawLoop() {
-  if (mediaType === 'image') {
-    sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
-    const imgAspect = img.width / img.height;
-    const canvasAspect = sourceCanvas.width / sourceCanvas.height;
-    let drawWidth = sourceCanvas.width;
-    let drawHeight = sourceCanvas.height;
-    let offsetX = 0;
-    let offsetY = 0;
+function resizeCanvases(width, height) {
+sourceCanvas.width = width;
+sourceCanvas.height = height;
+scanCanvas.width = width;
+scanCanvas.height = height;
+scanCanvasVertical.width = width;
+scanCanvasVertical.height = height;
+currentRow = 0;
+currentCol = 0;
+}
 
-    if (imgAspect > canvasAspect) {
-      drawWidth = sourceCanvas.height * imgAspect;
-      offsetX = (sourceCanvas.width - drawWidth) / 2;
-    } else {
-      drawHeight = sourceCanvas.width / imgAspect;
-      offsetY = (sourceCanvas.height - drawHeight) / 2;
-    }
+function drawLoop() {
+if (mediaType === 'image') {
+sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+const imgAspect = img.width / img.height;
+const canvasAspect = sourceCanvas.width / sourceCanvas.height;
+let drawWidth = sourceCanvas.width;
+let drawHeight = sourceCanvas.height;
+let offsetX = 0;
+let offsetY = 0;
 
-    sourceCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-  } else if (mediaType === 'video' && video) {
-    sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
-    const vidAspect = video.videoWidth / video.videoHeight;
-    const canvasAspect = sourceCanvas.width / sourceCanvas.height;
-    let drawWidth = sourceCanvas.width;
-    let drawHeight = sourceCanvas.height;
-    let offsetX = 0;
-    let offsetY = 0;
+if (imgAspect > canvasAspect) {
+drawWidth = sourceCanvas.height * imgAspect;
+offsetX = (sourceCanvas.width - drawWidth) / 2;
+} else {
+drawHeight = sourceCanvas.width / imgAspect;
+offsetY = (sourceCanvas.height - drawHeight) / 2;
+}
 
-    if (vidAspect > canvasAspect) {
-      drawWidth = sourceCanvas.height * vidAspect;
-      offsetX = (sourceCanvas.width - drawWidth) / 2;
-    } else {
-      drawHeight = sourceCanvas.width / vidAspect;
-      offsetY = (sourceCanvas.height - drawHeight) / 2;
-    }
+sourceCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+} else if (mediaType === 'video' && video) {
+sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+const vidAspect = video.videoWidth / video.videoHeight;
+const canvasAspect = sourceCanvas.width / sourceCanvas.height;
+let drawWidth = sourceCanvas.width;
+let drawHeight = sourceCanvas.height;
+let offsetX = 0;
+let offsetY = 0;
 
-    sourceCtx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
-  }
+if (vidAspect > canvasAspect) {
+drawWidth = sourceCanvas.height * vidAspect;
+offsetX = (sourceCanvas.width - drawWidth) / 2;
+} else {
+drawHeight = sourceCanvas.width / vidAspect;
+offsetY = (sourceCanvas.height - drawHeight) / 2;
+}
 
-  if (cursorInside) {
-        const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
-    const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
+sourceCtx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
+}
 
-    const imageData = sourceCtx.getImageData(0, clampedY, scanCanvas.width, 1);
-    const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, scanCanvas.height);
+if (cursorInside) {
+const clampedY = Math.max(0, Math.min(sourceCanvas.height - 1, cursorY));
+const clampedX = Math.max(0, Math.min(sourceCanvas.width - 1, cursorX));
 
-    const scrollImage = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
-    scanCtx.putImageData(scrollImage, 0, 1);
-    scanCtx.putImageData(imageData, 0, 0);
+const imageData = sourceCtx.getImageData(0, clampedY, scanCanvas.width, 1);
+const imageDataCol = sourceCtx.getImageData(clampedX, 0, 1, scanCanvas.height);
 
-    colQueue.push(imageDataCol);
-    if (colQueue.length > colDelay) {
-      const delayedCol = colQueue.shift();
-      scanCtxVertical.putImageData(delayedCol, currentCol, 0);
-      currentCol = (currentCol + 1) % scanCanvasVertical.width;
-    }
-  }
+const scrollImage = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height - 1);
+scanCtx.putImageData(scrollImage, 0, 1);
+scanCtx.putImageData(imageData, 0, 0);
+
+colQueue.push(imageDataCol);
+if (colQueue.length > colDelay) {
+const delayedCol = colQueue.shift();
+scanCtxVertical.putImageData(delayedCol, currentCol, 0);
+currentCol = (currentCol + 1) % scanCanvasVertical.width;
+}
+}
 }
 
 function loadRandomAsset() {
-      const asset = assets[Math.floor(Math.random() * assets.length)];
-      const isImage = asset.match(/\.(jpeg|jpg|png|gif)$/i);
-      const isVideo = asset.match(/\.(mp4|webm|ogg|mov)$/i);
+const asset = assets[Math.floor(Math.random() * assets.length)];
+const isImage = asset.match(/\.(jpeg|jpg|png|gif)$/i);
+const isVideo = asset.match(/\.(mp4|webm|ogg|mov)$/i);
 
-      if (isImage) {
-        img.onload = () => {
-          mediaType = 'image';
-          resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
-        };
-        img.src = asset;
-      } else if (isVideo) {
-        video = document.createElement('video');
-        video.src = asset;
-        video.autoplay = true;
-        video.muted = true;
-        video.loop = true;
-        video.onloadedmetadata = () => {
-          mediaType = 'video';
-          resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
-          video.play();
-        };
-      }
-    }
+if (isImage) {
+img.onload = () => {
+mediaType = 'image';
+resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
+};
+img.src = asset;
+} else if (isVideo) {
+video = document.createElement('video');
+video.src = asset;
+video.autoplay = true;
+video.muted = true;
+video.loop = true;
+video.onloadedmetadata = () => {
+mediaType = 'video';
+resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
+video.play();
+};
+}
+}
 
-    document.addEventListener('keydown', (e) => {
-
-  if (e.key.toLowerCase() === 'n') {
-    loadRandomAsset();
-  }
+document.addEventListener('keydown', (e) => {
+if (e.key.toLowerCase() === 'r') {
+leftContainer.classList.toggle('hidden');
+}
+if (e.key.toLowerCase() === 'n') {
+loadRandomAsset();
+}
+if (e.key.toLowerCase() === 'h') {
+const areVisible = cursorLine.style.visibility !== 'hidden';
+cursorLine.style.visibility = areVisible ? 'hidden' : 'visible';
+cursorLineVertical.style.visibility = areVisible ? 'hidden' : 'visible';
+}
 });
 
-    setInterval(drawLoop, 1000 / FPS);
-    loadRandomAsset();
+setInterval(drawLoop, 1000 / FPS);
+loadRandomAsset();
 
-    leftContainer.addEventListener('mouseenter', () => cursorInside = true);
-    leftContainer.addEventListener('mouseleave', () => {
-      cursorInside = false;
-      cursorLine.style.display = 'none';
-      cursorLineVertical.style.display = 'none';
-    });
-    leftContainer.addEventListener('mousemove', (e) => {
-      const rect = leftContainer.getBoundingClientRect();
-      cursorY = e.clientY - rect.top;
-      cursorX = e.clientX - rect.left;
-      cursorLine.style.top = `${e.clientY}px`;
-      cursorLine.style.display = 'block';
-      cursorLineVertical.style.left = `${e.clientX}px`;
-      cursorLineVertical.style.display = 'block';
-    });
-  document.getElementById('fileInput').addEventListener('change', (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (file.type.startsWith('image/')) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      img.onload = () => {
-        mediaType = 'image';
-        resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  } else if (file.type.startsWith('video/')) {
-    const videoURL = URL.createObjectURL(file);
-    video = document.createElement('video');
-    video.src = videoURL;
-    video.autoplay = true;
-    video.muted = true;
-    video.loop = true;
-    video.onloadedmetadata = () => {
-      mediaType = 'video';
-      resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
-      video.play();
-    };
-  }
+leftContainer.addEventListener('mouseenter', () => cursorInside = true);
+leftContainer.addEventListener('mouseleave', () => {
+cursorInside = false;
+cursorLine.style.display = 'none';
+cursorLineVertical.style.display = 'none';
+});
+leftContainer.addEventListener('mousemove', (e) => {
+const rect = leftContainer.getBoundingClientRect();
+cursorY = e.clientY - rect.top;
+cursorX = e.clientX - rect.left;
+cursorLine.style.top = `${e.clientY}px`;
+cursorLine.style.display = 'block';
+cursorLineVertical.style.left = `${e.clientX}px`;
+cursorLineVertical.style.display = 'block';
+});
+document.getElementById('fileInput').addEventListener('change', (event) => {
+const file = event.target.files[0];
+if (!file) return;
+if (file.type.startsWith('image/')) {
+const reader = new FileReader();
+reader.onload = (e) => {
+img.onload = () => {
+mediaType = 'image';
+resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(file);
+} else if (file.type.startsWith('video/')) {
+const videoURL = URL.createObjectURL(file);
+video = document.createElement('video');
+video.src = videoURL;
+video.autoplay = true;
+video.muted = true;
+video.loop = true;
+video.onloadedmetadata = () => {
+mediaType = 'video';
+resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
+video.play();
+};
+}
 });
 
 </script>
 </body>
 </html>
-
+~
