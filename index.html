@@ -49,13 +49,24 @@ justify-content: center;
   text-align: center;
   font-family: sans-serif;
   font-size: 12px;
-  color: #444;
+  color: #000;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   z-index: 100; /* keep it above canvas layers */
 }
+  #fileInputWrapper {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: sans-serif;
+  font-size: 12px;
+  color: #000;
+  text-align: center;
+}
+
   
 #middleRightWrapper {
 display: flex;
@@ -136,7 +147,6 @@ font-size: 10px;
     <strong>Start scanning</strong><br>
     Press R to reveal, N to load new
   </div>
-  <input type="file" id="fileInput" accept="image/*,video/*" />
 </div>
 <div id="cursorLine"></div>
 <div id="cursorLineVertical"></div>
@@ -347,5 +357,9 @@ video.play();
 });
 
 </script>
+  <div id="fileInputWrapper">
+  <input type="file" id="fileInput" accept="image/*,video/*" />
+</div>
+
 </body>
 </html>
