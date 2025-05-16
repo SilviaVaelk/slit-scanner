@@ -43,6 +43,7 @@ justify-content: center;
 }
 #instructionBlock {
   position: absolute;
+  top: 16px;
   top: 40px;
   left: 50%;
   transform: translateX(-50%);
@@ -58,6 +59,7 @@ justify-content: center;
 }
   #fileInputWrapper {
   position: absolute;
+  bottom: 16px;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
@@ -67,7 +69,7 @@ justify-content: center;
   text-align: center;
 }
 
-  
+
 #middleRightWrapper {
 display: flex;
 flex-direction: row;
@@ -144,6 +146,8 @@ font-size: 10px;
 <body>
 <div id="instructionBlock">
   <div>
+    <strong>Start scanning</strong><br>
+    Press R to reveal, N to load new
     <strong>User cursor to scan</strong><br>
     Press N to load new asset 
 or use the button at the bottom to upload your own
@@ -355,9 +359,12 @@ resizeCanvases(sourceCanvas.clientWidth, sourceCanvas.clientHeight);
 video.play();
 };
 }
-    <div id="fileInputWrapper">
+});
+
+</script>
+  <div id="fileInputWrapper">
   <input type="file" id="fileInput" accept="image/*,video/*" />
 </div>
-});
+
 </body>
 </html>
