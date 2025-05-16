@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slit-Scan Interactive fix3</title>
+<title>Slit-Scan Interactive resize</title>
 <style>
 html, body {
 margin: 0;
@@ -22,16 +22,17 @@ gap: 32px;
 flex-wrap: nowrap;
 }
 .container-square, #middle, #right {
-flex: 1 1 500px;
+/* flex: 1 1 500px;
 max-width: 500px;
 border-radius: 0;
-overflow: hidden;
+overflow: hidden; */
 }
 #left {
-height: 100%;
+width: 500px;
+height: 700px;
 aspect-ratio: 1 / 1;
-flex: 1 1 auto;
-max-width: 500px;
+flex: 0 0 auto;
+/* max-width: 500px; */
 border-radius: 8px;
 overflow: hidden;
 position: relative;
@@ -43,9 +44,10 @@ justify-content: center;
 #middleRightWrapper {
 display: flex;
 flex-direction: row;
-height: 100%;
-flex: 1 1 auto;
-max-width: 1000px;
+width: 600px;
+height: 700px%;
+flex: 0 0 auto;
+/* max-width: 1000px; */
 border-radius: 8px;
 overflow: hidden;
 background: white;
@@ -53,8 +55,10 @@ gap: 0;
 position: relative;
 }
 #middle, #right {
-flex: 1 1 500px;
-max-width: 500px;
+width: 600px;
+height: 700px;
+flex: 0 0 auto;
+/* max-width: 500px; */
 border-radius: 0;
 overflow: hidden;
 }
