@@ -41,6 +41,22 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 }
+#instructionBlock {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 100; /* keep it above canvas layers */
+}
+  
 #middleRightWrapper {
 display: flex;
 flex-direction: row;
@@ -115,9 +131,12 @@ font-size: 10px;
 </style>
 </head>
 <body>
-<div style="position: absolute; top: 32px; font-family: sans-serif; font-size: 12px; color: #444;">
-<div style="margin-bottom: 8px;"><strong>Start scanning</strong><br>Press N to load new</div>
-<input type="file" id="fileInput" accept="image/*,video/*" />
+<div id="instructionBlock">
+  <div>
+    <strong>Start scanning</strong><br>
+    Press R to reveal, N to load new
+  </div>
+  <input type="file" id="fileInput" accept="image/*,video/*" />
 </div>
 <div id="cursorLine"></div>
 <div id="cursorLineVertical"></div>
